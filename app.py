@@ -6,7 +6,7 @@ from utils.comparator import compare_ids
 
 st.set_page_config(page_title="ADIT vs EDI Comparator", page_icon="🔍", layout="wide")
 st.title("🔍 ADIT vs EDI Comparator")
-st.markdown("Google Sheet URLs paste karo aur IDs automatically compare ho jayengi.")
+st.markdown("Paste the Google Sheet URLs, and the system will automatically compare the IDs.")
 st.divider()
 
 # ── URL Input ──────────────────────────────────────────────────
