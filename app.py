@@ -143,7 +143,7 @@ if "result" in st.session_state:
 
     with t4:
         st.markdown(f"### 🟡 Difference ({len(result['difference'])})")
-        st.caption("ADIT + EDI dono ka jo match nahi hua")
+        st.caption("ADIT and EDI unmatched records")
         if result["difference"]:
             df_show = pd.DataFrame(result["difference"], columns=["ID"])
             st.dataframe(df_show, use_container_width=True, hide_index=True)
