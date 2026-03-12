@@ -45,7 +45,7 @@ if "adit_df" in st.session_state and "edi_df" in st.session_state:
     adit_df = st.session_state["adit_df"]
     edi_df  = st.session_state["edi_df"]
 
-    st.subheader("⚙️ Column Select Karo")
+    st.subheader("⚙️ Select Columns")
     cc1, cc2 = st.columns(2)
 
     with cc1:
