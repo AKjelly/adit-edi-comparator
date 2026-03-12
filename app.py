@@ -26,7 +26,7 @@ if st.button("📥 Fetch Sheets", use_container_width=True):
         st.error("⚠️ Dono URLs daalo pehle!")
         st.stop()
 
-    with st.spinner("Sheets fetch ho rahi hain..."):
+    with st.spinner("Fetching sheets...."):
         try:
             st.session_state["adit_df"] = fetch_sheet(adit_url, "ADIT")
         except Exception as e:
