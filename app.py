@@ -38,7 +38,7 @@ if st.button("📥 Fetch Sheets", use_container_width=True):
             st.error(f"EDI Sheet Error: {e}")
             st.stop()
 
-    st.success("✅ Sheets fetch ho gayi!")
+    st.success("✅ Sheets fetched")
 
 # ── Column Selection + Compare ─────────────────────────────────
 if "adit_df" in st.session_state and "edi_df" in st.session_state:
