@@ -152,11 +152,74 @@ if "result" in st.session_state:
             st.success("Koi difference nahi!")
 
     st.divider()
-    with st.expander("🔎 Raw Sheet Preview"):
-        p1, p2 = st.columns(2)
-        with p1:
-            st.markdown("**ADIT Sheet**")
-            st.dataframe(adit_df, use_container_width=True)
-        with p2:
-            st.markdown("**EDI Sheet**")
-            st.dataframe(edi_df, use_container_width=True)
+    with st.expander("📊 Daily Report Dashboard", expanded=True):
+
+        adit_df = st.session_state["adit_df"]
+        edi_df  = st.session_state["edi_df"]
+
+        # ── EDI Status Counts ──────────────────────────────────
+        edi_success    = 0
+        edi_failed     = 0
+        edi_inprogress = 0
+
+        if status_col != "— None —" and status_col in edi_df.columns:
+            edi_status_counts = edi_df[status_col].str.strip().str.lower().value_counts()
+            edi_success    = edi_status_counts.get("success", 0)
+            edi_failed     = edi_status_counts.get("failed", 0)
+            edi_inprogress = edi_status_counts.get("in progress", 0)
+
+        # ── ADIT Status Counts ─────────────────────────────────
+        verified      = 0
+        hard_verified = 0
+        failed_new    = 0
+        app_failed    = 0
+        app_inprogress= 0
+        skip          = 0
+
+        if status_col != "— None —" and status_col in adit_df.columns:
+            adit_status_counts = adit_df[status_col].str.strip().str.lower().value_counts()
+            verified       = adit_status_counts.get("verified", 0)
+            hard_verified  = adit_status_counts.get("hard verified", 0)
+            failed_new     = adit_status_counts.get("failed new", 0)
+            app_failed     = adit_status_counts.get("failed", 0)
+            app_inprogress = adit_status_counts.get("in progress", 0)
+            skip           = adit_status_counts.get("skip", 0)
+
+        # ── Computed Values ────────────────────────────────────
+        only_adit_count = len(result["only_adit"])
+        only_edi_count  = len(result["only_edi"])
+        diff_count      = len(result["difference"])
+        total_trigger   = len(adit_df) + len(edi_df)
+
+        # ── Row 1: Trigger & Difference ────────────────────────
+        st.markdown("#### 🔁 Trigger & Difference Summary")
+        d1, d2, d3, d4 = st.columns(4)
+        d1.metric("Total Trigger",          f"{total_trigger:,}")
+        d2.metric("Total Difference Count", f"{diff_count:,}")
+        d3.metric("🔴 Diff - App Report",   f"{only_adit_count:,}")
+        d4.metric("🔵 Diff - EDI Report",   f"{only_edi_count:,}")
+
+        st.divider()
+
+        # ── Row 2: EDI Summary ─────────────────────────────────
+        st.markdown("#### 📨 EDI Summary")
+        e1, e2, e3, e4, e5 = st.columns(5)
+        e1.metric("EDI Total Received", f"{len(edi_df):,}")
+        e2.metric("Stedi Total Count",  f"{len(edi_df):,}")
+        e3.metric("✅ Success",         f"{edi_success:,}")
+        e4.metric("❌ Failed",          f"{edi_failed:,}")
+        e5.metric("⏳ In Progress",     f"{edi_inprogress:,}")
+
+        st.divider()
+
+        # ── Row 3: App Summary ─────────────────────────────────
+        st.markdown("#### 📱 App Summary")
+        a1, a2, a3, a4, a5, a6, a7 = st.columns(7)
+        a1.metric("App Total",       f"{len(adit_df):,}")
+        a2.metric("✅ Verified",     f"{verified:,}")
+        a3.metric("💎 Hard Verified",f"{hard_verified:,}")
+        a4.metric("🆕 Failed New",   f"{failed_new:,}")
+        a5.metric("❌ Failed",       f"{app_failed:,}")
+        a6.metric("⏳ In Progress",  f"{app_inprogress:,}")
+        a7.metric("⏭ Skip",         f"{skip:,}")
+    
